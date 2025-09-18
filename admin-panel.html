@@ -5,112 +5,304 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel - BuildMyWeb</title>
 <link rel="stylesheet" href="style.css">
+<style>
+/* ===== General admin styles ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #1f1f1f;
+    color: #00bfff;
+}
+
+section {
+    margin: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #1f1f1f;
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #00bfff;
+    color: #121212;
+}
+
+.delete-btn, .edit-btn, .btn, #enableGod, #disableGod {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 2px;
+}
+
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.edit-btn {
+    background-color: #00bfff;
+    color: #121212;
+}
+
+#godmode {
+    padding: 15px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+}
+
+#godmode input {
+    padding: 5px;
+    margin-right: 5px;
+}
+
+#booking-modal {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+#booking-modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #1f1f1f;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+}
+
+.modal-content input {
+    width: 100%;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+}
+
+.modal-content button {
+    margin-top: 10px;
+    width: 48%;
+}
+</style>
 </head>
 <body>
+
 <header>
-<h1>Admin Panel</h1>
+    <h1>Admin Panel - BuildMyWeb</h1>
+    <button id="logout-btn" class="btn">Logout</button>
 </header>
 
 <!-- GOD MODE SECTION -->
-<section id="godmode" style="margin: 20px 0; padding: 10px; border: 2px solid #333; border-radius:5px; background:#f9f9f9;">
-<h2 style="text-align:center;">God Mode</h2>
-<label>God Mode Status: <span id="godStatus">Loading...</span></label><br><br>
-<input id="masterKey" type="password" placeholder="Enter Master Key">
-<button id="enableGod">Enable</button>
-<button id="disableGod">Disable</button>
+<section id="godmode">
+    <h2 style="text-align:center;">God Mode</h2>
+    <label>Status: <span id="godStatus">OFF</span></label><br><br>
+    <input id="masterKey" type="password" placeholder="Enter Master Key">
+    <button id="enableGod">Enable</button>
+    <button id="disableGod">Disable</button>
+</section>
+
+<section id="controls" style="margin-top:20px;">
+    <button id="addBookingBtn" class="btn">Add Booking</button>
+    <input type="text" id="searchInput" placeholder="Search Name/Email/Business">
+    <button id="exportBtn" class="btn">Export CSV</button>
 </section>
 
 <section id="appointments">
-<h2 style="text-align:center;">Appointments</h2>
-<table>
-<thead>
-<tr>
-<th>Slot</th>
-<th>Name</th>
-<th>Email</th>
-<th>Business</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody id="appointments-body"></tbody>
-</table>
+    <h2 style="text-align:center;">Appointments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Slot</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Business</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="appointments-body"></tbody>
+    </table>
 </section>
 
+<!-- Add/Edit Booking Modal -->
+<div id="booking-modal" class="hidden">
+    <div class="modal-content">
+        <h3 id="modalTitle">Add Booking</h3>
+        <input type="text" id="slotInput" placeholder="Slot" required>
+        <input type="text" id="nameInput" placeholder="Name" required>
+        <input type="email" id="emailInput" placeholder="Email" required>
+        <input type="text" id="businessInput" placeholder="Business" required>
+        <div style="display:flex; justify-content:space-between;">
+            <button id="saveBooking" class="btn">Save</button>
+            <button id="cancelBooking" class="btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <script>
-// Redirect to login if not authenticated
+// ===== Authentication check =====
 if(sessionStorage.getItem("isAdmin") !== "true"){
     window.location.href = "admin.html";
 }
-</script>
 
-<script>
-const appointmentsBody = document.getElementById("appointments-body");
+// ===== God Mode =====
+const MASTER_KEY = "prevail2025"; // Change to your secret key
+let godEnabled = JSON.parse(localStorage.getItem("godMode")) || false;
+const godStatus = document.getElementById("godStatus");
 
-// Function to render all bookings
-function renderBookings(){
-    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    appointmentsBody.innerHTML = "";
+function updateGodStatus() {
+    godStatus.innerText = godEnabled ? "ENABLED" : "OFF";
+}
+updateGodStatus();
 
-    bookings.forEach((b, index)=>{
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${b.slot}</td>
-            <td>${b.name}</td>
-            <td>${b.email}</td>
-            <td>${b.business}</td>
-            <td><button class="delete-btn" onclick="deleteBooking(${index})">Delete</button></td>
-        `;
-        appointmentsBody.appendChild(row);
-    });
+document.getElementById("enableGod").addEventListener("click", ()=>{
+    const key = document.getElementById("masterKey").value;
+    if(key === MASTER_KEY){
+        godEnabled = true;
+        localStorage.setItem("godMode", true);
+        alert("God Mode ENABLED");
+    } else {
+        alert("Incorrect Master Key");
+    }
+    updateGodStatus();
+});
+
+document.getElementById("disableGod").addEventListener("click", ()=>{
+    godEnabled = false;
+    localStorage.setItem("godMode", false);
+    updateGodStatus();
+});
+
+// ===== Bookings =====
+let appointmentsBody = document.getElementById("appointments-body");
+let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+let editIndex = null;
+
+function saveBookings() {
+    localStorage.setItem("bookings", JSON.stringify(bookings));
 }
 
-// Function to delete a booking
-function deleteBooking(index){
-    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    let bookedSlots = JSON.parse(localStorage.getItem("bookedSlots")) || [];
+function renderBookings() {
+    const filter = document.getElementById("searchInput").value.toLowerCase();
+    appointmentsBody.innerHTML = "";
+    bookings.forEach((b, i)=>{
+        if(b.name.toLowerCase().includes(filter) || b.email.toLowerCase().includes(filter) || b.business.toLowerCase().includes(filter)){
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${b.slot}</td>
+                <td>${b.name}</td>
+                <td>${b.email}</td>
+                <td>${b.business}</td>
+                <td>
+                    <button class="edit-btn" onclick="editBooking(${i})" ${!godEnabled?'disabled':''}>Edit</button>
+                    <button class="delete-btn" onclick="deleteBooking(${i})" ${!godEnabled?'disabled':''}>Delete</button>
+                </td>
+            `;
+            appointmentsBody.appendChild(row);
+        }
+    });
+}
+renderBookings();
+setInterval(renderBookings, 2000);
 
-    bookedSlots = bookedSlots.filter(slot => slot !== bookings[index].slot);
-    localStorage.setItem("bookedSlots", JSON.stringify(bookedSlots));
+// Add Booking Modal
+const modal = document.getElementById("booking-modal");
+const slotInput = document.getElementById("slotInput");
+const nameInput = document.getElementById("nameInput");
+const emailInput = document.getElementById("emailInput");
+const businessInput = document.getElementById("businessInput");
+const modalTitle = document.getElementById("modalTitle");
 
-    bookings.splice(index, 1);
-    localStorage.setItem("bookings", JSON.stringify(bookings));
+document.getElementById("addBookingBtn").addEventListener("click", ()=>{
+    if(!godEnabled){ alert("Enable God Mode first!"); return; }
+    editIndex = null;
+    slotInput.value = nameInput.value = emailInput.value = businessInput.value = "";
+    modalTitle.innerText = "Add Booking";
+    modal.classList.remove("hidden");
+});
 
+document.getElementById("cancelBooking").addEventListener("click", ()=>{
+    modal.classList.add("hidden");
+});
+
+document.getElementById("saveBooking").addEventListener("click", ()=>{
+    if(!godEnabled){ alert("Enable God Mode first!"); return; }
+    const newBooking = {
+        slot: slotInput.value,
+        name: nameInput.value,
+        email: emailInput.value,
+        business: businessInput.value
+    };
+    if(editIndex !== null){
+        bookings[editIndex] = newBooking;
+    } else {
+        bookings.push(newBooking);
+    }
+    saveBookings();
+    modal.classList.add("hidden");
+    renderBookings();
+});
+
+// Edit booking
+function editBooking(i){
+    if(!godEnabled){ alert("Enable God Mode first!"); return; }
+    editIndex = i;
+    const b = bookings[i];
+    slotInput.value = b.slot;
+    nameInput.value = b.name;
+    emailInput.value = b.email;
+    businessInput.value = b.business;
+    modalTitle.innerText = "Edit Booking";
+    modal.classList.remove("hidden");
+}
+
+// Delete booking
+function deleteBooking(i){
+    if(!godEnabled){ alert("Enable God Mode first!"); return; }
+    bookings.splice(i,1);
+    saveBookings();
     renderBookings();
 }
 
-// Initial render
-renderBookings();
+// Search bookings
+document.getElementById("searchInput").addEventListener("input", renderBookings);
 
-// Refresh every 2 seconds to catch new bookings
-setInterval(renderBookings, 2000);
-</script>
+// Export CSV
+document.getElementById("exportBtn").addEventListener("click", ()=>{
+    if(!godEnabled){ alert("Enable God Mode first!"); return; }
+    let csv = "Slot,Name,Email,Business\n";
+    bookings.forEach(b=>{ csv+=`${b.slot},${b.name},${b.email},${b.business}\n`; });
+    const blob = new Blob([csv], {type:"text/csv"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "bookings.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+});
 
-<!-- GOD MODE JS -->
-<script>
-async function api(path, opts = {}) {
-    const res = await fetch(path, Object.assign({credentials:'include', headers:{'Content-Type':'application/json'}}, opts));
-    return res.json();
-}
-
-async function refreshGodMode() {
-    const r = await api('/admin/settings');
-    document.getElementById('godStatus').innerText = r.settings.godModeEnabled ? 'ENABLED' : 'OFF';
-}
-
-window.addEventListener('load', () => {
-    refreshGodMode();
-
-    document.getElementById('enableGod').addEventListener('click', async () => {
-        const key = document.getElementById('masterKey').value;
-        await api('/admin/godmode/toggle', { method:'POST', body: JSON.stringify({action:'enable', masterKey:key}) });
-        refreshGodMode();
-    });
-
-    document.getElementById('disableGod').addEventListener('click', async () => {
-        const key = document.getElementById('masterKey').value;
-        await api('/admin/godmode/toggle', { method:'POST', body: JSON.stringify({action:'disable', masterKey:key}) });
-        refreshGodMode();
-    });
+// Logout
+document.getElementById("logout-btn").addEventListener("click", ()=>{
+    sessionStorage.removeItem("isAdmin");
+    window.location.href = "admin.html";
 });
 </script>
 
