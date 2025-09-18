@@ -11,6 +11,15 @@
 <h1>Admin Panel</h1>
 </header>
 
+<!-- GOD MODE SECTION -->
+<section id="godmode" style="margin: 20px 0; padding: 10px; border: 2px solid #333; border-radius:5px; background:#f9f9f9;">
+<h2 style="text-align:center;">God Mode</h2>
+<label>God Mode Status: <span id="godStatus">Loading...</span></label><br><br>
+<input id="masterKey" type="password" placeholder="Enter Master Key">
+<button id="enableGod">Enable</button>
+<button id="disableGod">Disable</button>
+</section>
+
 <section id="appointments">
 <h2 style="text-align:center;">Appointments</h2>
 <table>
@@ -33,7 +42,6 @@ if(sessionStorage.getItem("isAdmin") !== "true"){
     window.location.href = "admin.html";
 }
 </script>
-
 
 <script>
 const appointmentsBody = document.getElementById("appointments-body");
@@ -76,5 +84,35 @@ renderBookings();
 // Refresh every 2 seconds to catch new bookings
 setInterval(renderBookings, 2000);
 </script>
+
+<!-- GOD MODE JS -->
+<script>
+async function api(path, opts = {}) {
+    const res = await fetch(path, Object.assign({credentials:'include', headers:{'Content-Type':'application/json'}}, opts));
+    return res.json();
+}
+
+async function refreshGodMode() {
+    const r = await api('/admin/settings');
+    document.getElementById('godStatus').innerText = r.settings.godModeEnabled ? 'ENABLED' : 'OFF';
+}
+
+window.addEventListener('load', () => {
+    refreshGodMode();
+
+    document.getElementById('enableGod').addEventListener('click', async () => {
+        const key = document.getElementById('masterKey').value;
+        await api('/admin/godmode/toggle', { method:'POST', body: JSON.stringify({action:'enable', masterKey:key}) });
+        refreshGodMode();
+    });
+
+    document.getElementById('disableGod').addEventListener('click', async () => {
+        const key = document.getElementById('masterKey').value;
+        await api('/admin/godmode/toggle', { method:'POST', body: JSON.stringify({action:'disable', masterKey:key}) });
+        refreshGodMode();
+    });
+});
+</script>
+
 </body>
 </html>
