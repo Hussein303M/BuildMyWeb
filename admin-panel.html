@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - BuildMyWeb</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+<h1>Admin Panel</h1>
+</header>
+
+<section id="appointments">
+<h2 style="text-align:center;">Appointments</h2>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Name</th>
+<th>Email</th>
+<th>Business</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="appointments-body"></tbody>
+</table>
+</section>
+
+<script>
+const appointmentsBody = document.getElementById("appointments-body");
+
+// Function to render all bookings
+function renderBookings(){
+    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    appointmentsBody.innerHTML = "";
+
+    bookings.forEach((b, index)=>{
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${b.slot}</td>
+            <td>${b.name}</td>
+            <td>${b.email}</td>
+            <td>${b.business}</td>
+            <td><button class="delete-btn" onclick="deleteBooking(${index})">Delete</button></td>
+        `;
+        appointmentsBody.appendChild(row);
+    });
+}
+
+// Function to delete a booking
+function deleteBooking(index){
+    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    let bookedSlots = JSON.parse(localStorage.getItem("bookedSlots")) || [];
+
+    bookedSlots = bookedSlots.filter(slot => slot !== bookings[index].slot);
+    localStorage.setItem("bookedSlots", JSON.stringify(bookedSlots));
+
+    bookings.splice(index, 1);
+    localStorage.setItem("bookings", JSON.stringify(bookings));
+
+    renderBookings();
+}
+
+// Initial render
+renderBookings();
+
+// Refresh every 2 seconds to catch new bookings
+setInterval(renderBookings, 2000);
+</script>
+</body>
+</html>

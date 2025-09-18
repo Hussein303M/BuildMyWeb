@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildMyWeb</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* Hero Section */
+.hero {
+    background-color: #1f1f1f;
+    padding: 80px 20px;
+    text-align: center;
+    border-bottom: 2px solid #00bfff;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 30px;
+    color: #cccccc;
+}
+
+/* Services Section */
+.services {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 50px 20px;
+}
+
+.card {
+    background-color: #1f1f1f;
+    border-radius: 12px;
+    padding: 30px 20px;
+    width: 250px;
+    text-align: center;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background-color: #2c2c2c;
+}
+
+.card h3 {
+    color: #00bfff;
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: #cccccc;
+    margin-bottom: 15px;
+}
+
+.book-btn {
+    display: inline-block;
+    background-color: #00bfff;
+    color: #121212;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.book-btn:hover {
+    background-color: #009acd;
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>BuildMyWeb</h1>
+    <p>Professional websites for your business. Modern, clean, and fully responsive to help your brand stand out online.</p>
+    <a href="booking.html" class="book-btn">Book Now</a>
+</header>
+
+<section class="services">
+    <div class="card">
+        <h3>Basic Website</h3>
+        <p>Simple 3–5 page website for small businesses.</p>
+        <p><strong>$200</strong></p>
+    </div>
+    <div class="card">
+        <h3>Business Website</h3>
+        <p>More advanced website with additional pages and features.</p>
+        <p><strong>$400</strong></p>
+    </div>
+    <div class="card">
+        <h3>Custom Projects</h3>
+        <p>Need something unique? We can build it for you.</p>
+        <p><strong>Contact us</strong></p>
+    </div>
+</section>
+
+</body>
+</html>

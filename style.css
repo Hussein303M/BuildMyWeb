@@ -1,0 +1,144 @@
+/* ===== General Styles ===== */
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    padding: 30px 10px;
+    background-color: #1f1f1f;
+}
+
+h1, h2, h3 {
+    color: #00bfff;
+}
+
+a, .btn {
+    background-color: #00bfff;
+    color: #121212;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 8px;
+    display: inline-block;
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+
+a:hover, .btn:hover {
+    background-color: #009acd;
+}
+
+/* ===== Forms ===== */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 30px auto;
+    gap: 15px;
+}
+
+input, button {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 1rem;
+}
+
+/* ===== Calendar ===== */
+#calendar {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 10px;
+}
+
+.month-name {
+    text-align: center;
+    font-size: 2rem;
+    color: #00bfff;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.day-name {
+    text-align: center;
+    font-weight: 700;
+    color: #00bfff;
+    padding: 12px 0;
+    border-bottom: 2px solid #00bfff;
+}
+
+.day-cell {
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+.date-number {
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.slot {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    border: none;
+    margin: 5px 0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 6px 0;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.slot:hover {
+    background-color: #009acd;
+    transform: translateY(-2px);
+}
+
+.slot.booked {
+    text-decoration: line-through;
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #333;
+}
+
+/* ===== Admin Table ===== */
+table {
+    width: 90%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+th, td {
+    padding: 12px;
+    border: 1px solid #333;
+    text-align: left;
+}
+th {
+    background-color: #00bfff;
+    color: #121212;
+}
+.delete-btn {
+    background-color: #ff4d4d;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

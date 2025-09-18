@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login - BuildMyWeb</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Admin Login</h1>
+</header>
+
+<section id="admin-login">
+<form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+
+    <button type="submit" class="btn">Login</button>
+</form>
+<p id="error-msg" style="color:red; text-align:center; margin-top:10px;"></p>
+</section>
+
+<script>
+const loginForm = document.getElementById("loginForm");
+const errorMsg = document.getElementById("error-msg");
+
+// Change these to something secure
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "12345";
+
+loginForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if(username===ADMIN_USERNAME && password===ADMIN_PASSWORD){
+        window.location.href = "admin-panel.html";
+    } else {
+        errorMsg.textContent = "Invalid username or password.";
+    }
+});
+</script>
+</body>
+</html>
