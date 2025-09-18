@@ -28,6 +28,14 @@
 </section>
 
 <script>
+// Redirect to login if not authenticated
+if(sessionStorage.getItem("isAdmin") !== "true"){
+    window.location.href = "admin.html";
+}
+</script>
+
+
+<script>
 const appointmentsBody = document.getElementById("appointments-body");
 
 // Function to render all bookings
