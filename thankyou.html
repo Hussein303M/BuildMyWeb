@@ -5,11 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thank You - BuildMyWeb</title>
 <link rel="stylesheet" href="style.css">
+<style>
+.confirmation {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background: transparent;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.confirmation h2 {
+    margin-bottom: 10px;
+}
+.confirmation p {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+</style>
 </head>
 <body>
 <header>
     <h1>Thank You!</h1>
-    <p>Your appointment has been booked successfully. You will receive an email with the next steps.</p>
+    <p>Your appointment has been booked successfully.</p>
 </header>
+
+<section class="confirmation">
+    <h2>Booking Confirmation</h2>
+    <p><strong>Name:</strong> <span id="confirmName"></span></p>
+    <p><strong>Email:</strong> <span id="confirmEmail"></span></p>
+    <p><strong>Business:</strong> <span id="confirmBusiness"></span></p>
+    <p><strong>Date & Time:</strong> <span id="confirmSlot"></span></p>
+</section>
+
+<script>
+// Get last booking from localStorage
+const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+if (bookings.length > 0) {
+    const lastBooking = bookings[bookings.length - 1]; // last added booking
+    document.getElementById("confirmName").innerText = lastBooking.name;
+    document.getElementById("confirmEmail").innerText = lastBooking.email;
+    document.getElementById("confirmBusiness").innerText = lastBooking.business;
+    document.getElementById("confirmSlot").innerText = lastBooking.slot;
+} else {
+    document.querySelector(".confirmation").innerHTML = "<p>No booking found.</p>";
+}
+</script>
 </body>
 </html>

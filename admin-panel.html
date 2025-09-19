@@ -23,12 +23,41 @@
 .delete-btn { background-color: #ff4d4d; color: #fff; }
 .delete-all-btn { background-color: #cc0000; color: #fff; }
 .export-btn { background-color: #4caf50; color: #fff; }
+
+.dashboard {
+    text-align: center;
+    margin: 20px;
+    padding: 15px;
+    background: #1f1f1f;
+    border-radius: 10px;
+}
+.search-box {
+    text-align: center;
+    margin: 20px;
+}
+.search-box input {
+    padding: 10px;
+    width: 60%;
+    border-radius: 6px;
+    border: none;
+}
 </style>
 </head>
 <body>
 <header>
     <h1>Admin Panel</h1>
 </header>
+
+<!-- Dashboard Summary -->
+<section class="dashboard">
+    <h2>Dashboard</h2>
+    <p id="summaryText">Loading...</p>
+</section>
+
+<!-- Search -->
+<section class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by name, email, or slot...">
+</section>
 
 <!-- Admin Controls -->
 <section class="admin-actions">
@@ -54,6 +83,21 @@
     </table>
 </section>
 
+<!-- Messages Table -->
+<section id="messages">
+    <h2 style="text-align:center;">Contact Messages</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody id="messages-body"></tbody>
+    </table>
+</section>
+
 <script>
 // Redirect to login if not authenticated
 if (sessionStorage.getItem("isAdmin") !== "true") {
@@ -61,31 +105,57 @@ if (sessionStorage.getItem("isAdmin") !== "true") {
 }
 
 const appointmentsBody = document.getElementById("appointments-body");
+const messagesBody = document.getElementById("messages-body");
 
-// Render all bookings
+// ===== Render Bookings =====
 function renderBookings() {
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    const search = document.getElementById("searchInput").value.toLowerCase();
     appointmentsBody.innerHTML = "";
 
-    bookings.forEach((b, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${b.slot}</td>
-            <td>${b.name}</td>
-            <td>${b.email}</td>
-            <td>${b.business}</td>
-            <td>
-                <button class="edit-btn" onclick="editBooking(${index})">Edit</button>
-                <button class="delete-btn" onclick="deleteBooking(${index})">Delete</button>
-            </td>
-        `;
-        appointmentsBody.appendChild(row);
-    });
+    bookings
+        .filter(b =>
+            b.name.toLowerCase().includes(search) ||
+            b.email.toLowerCase().includes(search) ||
+            b.slot.toLowerCase().includes(search)
+        )
+        .forEach((b, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${b.slot}</td>
+                <td>${b.name}</td>
+                <td>${b.email}</td>
+                <td>${b.business}</td>
+                <td>
+                    <button class="edit-btn" onclick="editBooking(${index})">Edit</button>
+                    <button class="delete-btn" onclick="deleteBooking(${index})">Delete</button>
+                </td>
+            `;
+            appointmentsBody.appendChild(row);
+        });
+
+    updateDashboard(bookings);
 }
 
-// Add booking
+// ===== Dashboard Summary =====
+function updateDashboard(bookings) {
+    const total = bookings.length;
+    const now = new Date();
+    const weekStart = new Date();
+    weekStart.setDate(now.getDate() - 7);
+
+    const thisWeek = bookings.filter(b => {
+        const date = new Date(b.slot);
+        return !isNaN(date) && date >= weekStart && date <= now;
+    }).length;
+
+    document.getElementById("summaryText").innerText =
+        `Total Bookings: ${total} | Bookings This Week: ${thisWeek}`;
+}
+
+// ===== Add booking =====
 function addBooking() {
-    const slot = prompt("Enter slot (e.g. 10:00 AM)");
+    const slot = prompt("Enter slot (e.g. 2025-09-20 10:00 AM)");
     const name = prompt("Enter name");
     const email = prompt("Enter email");
     const business = prompt("Enter business");
@@ -99,7 +169,7 @@ function addBooking() {
     renderBookings();
 }
 
-// Edit booking
+// ===== Edit booking =====
 function editBooking(index) {
     let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const booking = bookings[index];
@@ -120,7 +190,7 @@ function editBooking(index) {
     renderBookings();
 }
 
-// Delete single booking
+// ===== Delete booking =====
 function deleteBooking(index) {
     let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     bookings.splice(index, 1);
@@ -128,7 +198,7 @@ function deleteBooking(index) {
     renderBookings();
 }
 
-// Delete all bookings
+// ===== Delete all bookings =====
 function deleteAllBookings() {
     if (confirm("Are you sure you want to delete ALL bookings?")) {
         localStorage.removeItem("bookings");
@@ -137,7 +207,7 @@ function deleteAllBookings() {
     }
 }
 
-// Export bookings as CSV
+// ===== Export CSV =====
 function exportCSV() {
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     if (bookings.length === 0) return alert("No bookings to export!");
@@ -156,11 +226,32 @@ function exportCSV() {
     URL.revokeObjectURL(url);
 }
 
-// Initial render
-renderBookings();
+// ===== Render Messages =====
+function renderMessages() {
+    const messages = JSON.parse(localStorage.getItem("messages")) || [];
+    messagesBody.innerHTML = "";
 
-// Auto-refresh every 2s
-setInterval(renderBookings, 2000);
+    messages.forEach(m => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${m.name}</td>
+            <td>${m.email}</td>
+            <td>${m.message}</td>
+        `;
+        messagesBody.appendChild(row);
+    });
+}
+
+// ===== Init =====
+renderBookings();
+renderMessages();
+setInterval(() => {
+    renderBookings();
+    renderMessages();
+}, 2000);
+
+// Search live filter
+document.getElementById("searchInput").addEventListener("input", renderBookings);
 </script>
 </body>
 </html>
