@@ -6,6 +6,30 @@
 <title>Admin Panel - BuildMyWeb</title>
 <link rel="stylesheet" href="style.css">
 <style>
+body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background: #00bfff;
+    color: #121212;
+    padding: 15px;
+    text-align: center;
+}
+.admin-summary {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 8px;
+}
+.admin-summary div {
+    text-align: center;
+}
 .admin-actions {
     text-align: center;
     margin: 20px;
@@ -24,22 +48,27 @@
 .delete-all-btn { background-color: #cc0000; color: #fff; }
 .export-btn { background-color: #4caf50; color: #fff; }
 
-.dashboard {
-    text-align: center;
-    margin: 20px;
-    padding: 15px;
-    background: #1f1f1f;
-    border-radius: 10px;
-}
 .search-box {
     text-align: center;
-    margin: 20px;
+    margin: 15px;
 }
 .search-box input {
-    padding: 10px;
+    padding: 8px;
     width: 60%;
     border-radius: 6px;
     border: none;
+}
+
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: #1e1e1e;
+}
+table th, table td {
+    padding: 12px;
+    border: 1px solid #333;
+    text-align: center;
 }
 </style>
 </head>
@@ -49,21 +78,27 @@
 </header>
 
 <!-- Dashboard Summary -->
-<section class="dashboard">
-    <h2>Dashboard</h2>
-    <p id="summaryText">Loading...</p>
-</section>
-
-<!-- Search -->
-<section class="search-box">
-    <input type="text" id="searchInput" placeholder="Search by name, email, or slot...">
+<section class="admin-summary">
+    <div>
+        <h2 id="weeklyCount">0</h2>
+        <p>Bookings This Week</p>
+    </div>
+    <div>
+        <h2 id="totalCount">0</h2>
+        <p>Total Bookings</p>
+    </div>
 </section>
 
 <!-- Admin Controls -->
 <section class="admin-actions">
     <button class="add-btn" onclick="addBooking()">Add Booking</button>
-    <button class="delete-all-btn" onclick="deleteAllBookings()">Delete All</button>
+    <button class="delete-all-btn" onclick="deleteAllBookings()">Delete All Bookings</button>
     <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+</section>
+
+<!-- Search -->
+<section class="search-box">
+    <input type="text" id="searchInput" placeholder="Search bookings by name, email, or date..." onkeyup="renderBookings()">
 </section>
 
 <!-- Appointments Table -->
@@ -83,15 +118,19 @@
     </table>
 </section>
 
-<!-- Messages Table -->
+<!-- Contact Messages Section -->
 <section id="messages">
     <h2 style="text-align:center;">Contact Messages</h2>
+    <div class="admin-actions">
+        <button class="delete-all-btn" onclick="deleteAllMessages()">Delete All Messages</button>
+    </div>
     <table>
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Message</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody id="messages-body"></tbody>
@@ -107,53 +146,68 @@ if (sessionStorage.getItem("isAdmin") !== "true") {
 const appointmentsBody = document.getElementById("appointments-body");
 const messagesBody = document.getElementById("messages-body");
 
-// ===== Render Bookings =====
+// Render all bookings with search filter
 function renderBookings() {
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const search = document.getElementById("searchInput").value.toLowerCase();
     appointmentsBody.innerHTML = "";
 
-    bookings
-        .filter(b =>
-            b.name.toLowerCase().includes(search) ||
-            b.email.toLowerCase().includes(search) ||
-            b.slot.toLowerCase().includes(search)
-        )
-        .forEach((b, index) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${b.slot}</td>
-                <td>${b.name}</td>
-                <td>${b.email}</td>
-                <td>${b.business}</td>
-                <td>
-                    <button class="edit-btn" onclick="editBooking(${index})">Edit</button>
-                    <button class="delete-btn" onclick="deleteBooking(${index})">Delete</button>
-                </td>
-            `;
-            appointmentsBody.appendChild(row);
-        });
-
-    updateDashboard(bookings);
-}
-
-// ===== Dashboard Summary =====
-function updateDashboard(bookings) {
-    const total = bookings.length;
+    let weeklyCount = 0;
     const now = new Date();
-    const weekStart = new Date();
-    weekStart.setDate(now.getDate() - 7);
+    const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
+    const weekEnd = new Date(now.setDate(weekStart.getDate() + 6));
 
-    const thisWeek = bookings.filter(b => {
-        const date = new Date(b.slot);
-        return !isNaN(date) && date >= weekStart && date <= now;
-    }).length;
+    bookings.forEach((b, index) => {
+        const match = 
+            b.name.toLowerCase().includes(search) || 
+            b.email.toLowerCase().includes(search) ||
+            b.slot.toLowerCase().includes(search);
 
-    document.getElementById("summaryText").innerText =
-        `Total Bookings: ${total} | Bookings This Week: ${thisWeek}`;
+        if (!match) return;
+
+        if (Date.parse(b.slot)) {
+            const slotDate = new Date(b.slot);
+            if (slotDate >= weekStart && slotDate <= weekEnd) weeklyCount++;
+        }
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${b.slot}</td>
+            <td>${b.name}</td>
+            <td>${b.email}</td>
+            <td>${b.business}</td>
+            <td>
+                <button class="edit-btn" onclick="editBooking(${index})">Edit</button>
+                <button class="delete-btn" onclick="deleteBooking(${index})">Delete</button>
+            </td>
+        `;
+        appointmentsBody.appendChild(row);
+    });
+
+    document.getElementById("weeklyCount").textContent = weeklyCount;
+    document.getElementById("totalCount").textContent = bookings.length;
 }
 
-// ===== Add booking =====
+// Render messages
+function renderMessages() {
+    const messages = JSON.parse(localStorage.getItem("messages")) || [];
+    messagesBody.innerHTML = "";
+
+    messages.forEach((m, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${m.name}</td>
+            <td>${m.email}</td>
+            <td>${m.message}</td>
+            <td>
+                <button class="delete-btn" onclick="deleteMessage(${index})">Delete</button>
+            </td>
+        `;
+        messagesBody.appendChild(row);
+    });
+}
+
+// Add booking
 function addBooking() {
     const slot = prompt("Enter slot (e.g. 2025-09-20 10:00 AM)");
     const name = prompt("Enter name");
@@ -169,7 +223,7 @@ function addBooking() {
     renderBookings();
 }
 
-// ===== Edit booking =====
+// Edit booking
 function editBooking(index) {
     let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const booking = bookings[index];
@@ -190,7 +244,7 @@ function editBooking(index) {
     renderBookings();
 }
 
-// ===== Delete booking =====
+// Delete single booking
 function deleteBooking(index) {
     let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     bookings.splice(index, 1);
@@ -198,7 +252,7 @@ function deleteBooking(index) {
     renderBookings();
 }
 
-// ===== Delete all bookings =====
+// Delete all bookings
 function deleteAllBookings() {
     if (confirm("Are you sure you want to delete ALL bookings?")) {
         localStorage.removeItem("bookings");
@@ -207,7 +261,23 @@ function deleteAllBookings() {
     }
 }
 
-// ===== Export CSV =====
+// Delete single message
+function deleteMessage(index) {
+    let messages = JSON.parse(localStorage.getItem("messages")) || [];
+    messages.splice(index, 1);
+    localStorage.setItem("messages", JSON.stringify(messages));
+    renderMessages();
+}
+
+// Delete all messages
+function deleteAllMessages() {
+    if (confirm("Are you sure you want to delete ALL messages?")) {
+        localStorage.removeItem("messages");
+        renderMessages();
+    }
+}
+
+// Export bookings as CSV
 function exportCSV() {
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     if (bookings.length === 0) return alert("No bookings to export!");
@@ -226,32 +296,15 @@ function exportCSV() {
     URL.revokeObjectURL(url);
 }
 
-// ===== Render Messages =====
-function renderMessages() {
-    const messages = JSON.parse(localStorage.getItem("messages")) || [];
-    messagesBody.innerHTML = "";
-
-    messages.forEach(m => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${m.name}</td>
-            <td>${m.email}</td>
-            <td>${m.message}</td>
-        `;
-        messagesBody.appendChild(row);
-    });
-}
-
-// ===== Init =====
+// Initial render
 renderBookings();
 renderMessages();
+
+// Auto-refresh every 2s
 setInterval(() => {
     renderBookings();
     renderMessages();
 }, 2000);
-
-// Search live filter
-document.getElementById("searchInput").addEventListener("input", renderBookings);
 </script>
 </body>
 </html>
