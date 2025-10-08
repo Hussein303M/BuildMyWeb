@@ -1,146 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BuildMyWeb</title>
-<link rel="stylesheet" href="style.css">
+  <!--
+    ========================================
+    BuildMyWeb — Main Page (index.html)
+    Author: You :)
+    Purpose: Marketing site for local-business web design service
+    Notes:
+      - Works great on GitHub Pages
+      - Contact form powered by Formspree
+      - Update links, images, and text as you grow
+    ========================================
+  -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Basic SEO -->
+  <title>BuildMyWeb — Affordable Websites for Local Businesses</title>
+  <meta name="description" content="We build fast, mobile-ready websites for local businesses. Transparent pricing, quick turnaround, and ongoing support. Get a free quote today." />
+  <link rel="canonical" href="https://your-username.github.io/" />
+
+  <!-- Social sharing -->
+  <meta property="og:title" content="BuildMyWeb — Affordable Websites for Local Businesses" />
+  <meta property="og:description" content="Fast, mobile-ready websites with transparent pricing. Get a free quote." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://your-username.github.io/" />
+  <meta property="og:image" content="https://your-username.github.io/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BuildMyWeb — Affordable Websites for Local Businesses" />
+  <meta name="twitter:description" content="Fast, mobile-ready websites with transparent pricing. Get a free quote." />
+  <meta name="twitter:image" content="https://your-username.github.io/og-image.jpg" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-<!-- ===== Navigation ===== -->
-<nav>
-  <div class="logo">BuildMyWeb</div>
-  <ul>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="#trust">Why Us</a></li>
-    <li><a href="#reviews">Reviews</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="booking.html" class="btn">Book Now</a></li>
-  </ul>
-</nav>
+  <!-- =============================
+       NAVIGATION
+       ============================= -->
+  <nav aria-label="Main">
+    <div class="logo"><a href="./" aria-label="BuildMyWeb home">BuildMyWeb</a></div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#trust">Why Us</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact" class="btn btn-primary">Get a Free Quote</a></li>
+      <li><a href="booking.html" class="btn btn-secondary">Book a Quick Chat</a></li>
+    </ul>
+  </nav>
 
-<!-- ===== Hero Section ===== -->
-<header class="hero">
-  <h1>BuildMyWeb</h1>
-  <p>Professional websites for your business. Modern, clean, and fully responsive to help your brand stand out online.</p>
-  <a href="booking.html" class="btn">Book Now</a>
-</header>
-
-<!-- ===== Services Section ===== -->
-<section id="services" class="services">
-  <div class="card">
-    <h3>Basic Website</h3>
-    <p>Simple 3–5 page website for small businesses.</p>
-    <p><strong>$200</strong></p>
-  </div>
-  <div class="card">
-    <h3>Business Website</h3>
-    <p>More advanced website with additional pages and features.</p>
-    <p><strong>$400</strong></p>
-  </div>
-  <div class="card">
-    <h3>Custom Projects</h3>
-    <p>Need something unique? We can build it for you.</p>
-    <p><strong>Contact us</strong></p>
-  </div>
-</section>
-
-<!-- ===== Portfolio Section ===== -->
-<section id="portfolio" class="portfolio">
-  <h2>Our Portfolio</h2>
-  <div class="portfolio-grid">
-    <div class="portfolio-card">
-      <img src="https://via.placeholder.com/300x180" alt="Project 1">
-      <div class="portfolio-card-content">
-        <h3>Business Website</h3>
-        <p>A sleek modern business website with responsive design and custom branding.</p>
+  <main id="main">
+    <!-- =============================
+         HERO SECTION
+         ============================= -->
+    <header class="hero">
+      <h1>Get Your Business Online — Fast &amp; Affordable</h1>
+      <p>We build modern, mobile-ready websites for local businesses — quick turnaround, clear pricing, and ongoing support.</p>
+      <div class="cta-row">
+        <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
+        <a href="booking.html" class="btn btn-secondary">Book a 10-min Call</a>
       </div>
-    </div>
-    <div class="portfolio-card">
-      <img src="https://via.placeholder.com/300x180" alt="Project 2">
-      <div class="portfolio-card-content">
-        <h3>E-commerce Store</h3>
-        <p>Custom online store with payment integration and user-friendly UI.</p>
+      <p class="microcopy">No pressure. We’ll email a plan and price within 24 hours.</p>
+    </header>
+
+    <!-- =============================
+         SERVICES
+         ============================= -->
+    <section id="services" class="section services">
+      <h2>Services &amp; Pricing</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Basic Website</h3>
+          <ul>
+            <li>3–5 pages (Home, About, Services, Contact)</li>
+            <li>Mobile-responsive design</li>
+            <li>Contact form &amp; basic SEO</li>
+          </ul>
+          <p class="price"><strong>From $200</strong></p>
+          <a href="#contact" class="card-cta">Get Quote</a>
+        </article>
+
+        <article class="card">
+          <h3>Business Website</h3>
+          <ul>
+            <li>Up to 10 pages + blog</li>
+            <li>Advanced layout &amp; SEO setup</li>
+            <li>Analytics &amp; speed optimization</li>
+          </ul>
+          <p class="price"><strong>From $400</strong></p>
+          <a href="#contact" class="card-cta">Get Quote</a>
+        </article>
+
+        <article class="card">
+          <h3>Custom Projects</h3>
+          <ul>
+            <li>Unique features or integrations</li>
+            <li>E-commerce, booking, portals</li>
+            <li>Tailored UI &amp; brand assets</li>
+          </ul>
+          <p class="price"><strong>Contact us</strong></p>
+          <a href="#contact" class="card-cta">Discuss Your Idea</a>
+        </article>
       </div>
-    </div>
-    <div class="portfolio-card">
-      <img src="https://via.placeholder.com/300x180" alt="Project 3">
-      <div class="portfolio-card-content">
-        <h3>Landing Page</h3>
-        <p>High-converting landing page designed to boost leads and sales.</p>
+    </section>
+
+    <!-- =============================
+         PORTFOLIO
+         ============================= -->
+    <section id="portfolio" class="section portfolio">
+      <h2>Recent Work</h2>
+      <div class="portfolio-grid">
+        <article class="portfolio-card">
+          <img src="https://via.placeholder.com/300x180" alt="Modern business website" loading="lazy" />
+          <div class="portfolio-card-content">
+            <h3>Business Website</h3>
+            <p>A sleek, responsive site with custom branding and clear calls-to-action.</p>
+          </div>
+        </article>
+
+        <article class="portfolio-card">
+          <img src="https://via.placeholder.com/300x180" alt="E-commerce store" loading="lazy" />
+          <div class="portfolio-card-content">
+            <h3>E-commerce Store</h3>
+            <p>Custom store with secure payments and a user-friendly experience.</p>
+          </div>
+        </article>
+
+        <article class="portfolio-card">
+          <img src="https://via.placeholder.com/300x180" alt="Landing page example" loading="lazy" />
+          <div class="portfolio-card-content">
+            <h3>Landing Page</h3>
+            <p>High-converting page designed to capture leads and boost conversions.</p>
+          </div>
+        </article>
+
+        <article class="portfolio-card">
+          <img src="https://via.placeholder.com/300x180" alt="Portfolio site example" loading="lazy" />
+          <div class="portfolio-card-content">
+            <h3>Portfolio Website</h3>
+            <p>Clean showcase for creative professionals with smooth navigation.</p>
+          </div>
+        </article>
       </div>
+    </section>
+
+    <!-- =============================
+         WHY US
+         ============================= -->
+    <section id="trust" class="section trust">
+      <h2>Why Trust BuildMyWeb?</h2>
+      <ul>
+        <li><strong>Clear Process:</strong> Simple steps from idea to launch; no jargon.</li>
+        <li><strong>Fast Turnaround:</strong> Most sites live in 1–2 weeks.</li>
+        <li><strong>SEO-Ready:</strong> On-page SEO, Google Maps &amp; Analytics setup.</li>
+        <li><strong>Ongoing Support:</strong> Updates, maintenance, and real help.</li>
+      </ul>
+    </section>
+
+    <!-- =============================
+         REVIEWS
+         ============================= -->
+    <section id="reviews" class="section reviews">
+      <h2>What Our Clients Say</h2>
+      <figure class="review-card">
+        <blockquote>
+          <p>“BuildMyWeb created the perfect site for my business. Affordable and professional!”</p>
+        </blockquote>
+        <figcaption>— Sarah M., Salon Owner</figcaption>
+      </figure>
+      <figure class="review-card">
+        <blockquote>
+          <p>“Quick, reliable, and delivered beyond expectations. Highly recommend.”</p>
+        </blockquote>
+        <figcaption>— Jason L., Home Services</figcaption>
+      </figure>
+      <figure class="review-card">
+        <blockquote>
+          <p>“My new portfolio helped me land clients instantly.”</p>
+        </blockquote>
+        <figcaption>— Emily R., Designer</figcaption>
+      </figure>
+    </section>
+
+    <!-- =============================
+         FAQ
+         ============================= -->
+    <section id="faq" class="section faq">
+      <h2>Frequently Asked Questions</h2>
+      <details>
+        <summary>How long does it take to build a website?</summary>
+        <p>Basic sites typically launch in 1–2 weeks; larger projects may take longer depending on scope.</p>
+      </details>
+      <details>
+        <summary>Do you offer ongoing support?</summary>
+        <p>Yes. We provide support, updates, and maintenance plans tailored to your needs.</p>
+      </details>
+      <details>
+        <summary>Can I request custom features?</summary>
+        <p>Absolutely. We tailor every site to your business, from booking to e-commerce.</p>
+      </details>
+      <details>
+        <summary>How does pricing work?</summary>
+        <p>Packages start at the prices shown above. After a quick brief, we’ll send a fixed quote before we begin.</p>
+      </details>
+    </section>
+
+    <!-- =============================
+         CONTACT FORM (Formspree)
+         ============================= -->
+    <section id="contact" class="section contact">
+      <h2>Get a Free Quote</h2>
+      <form action="https://formspree.io/f/mwprnydo" method="POST" class="contact-form" novalidate>
+        <div class="field-row">
+          <label>
+            <span>Your Name</span>
+            <input type="text" name="name" placeholder="Jane Doe" required />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" placeholder="you@business.com" required />
+          </label>
+        </div>
+
+        <div class="field-row">
+          <label>
+            <span>Business Name</span>
+            <input type="text" name="business" placeholder="Jane's Salon" />
+          </label>
+          <label>
+            <span>Website Type</span>
+            <select name="type">
+              <option value="">Select type…</option>
+              <option>Restaurant</option>
+              <option>Salon/Barber</option>
+              <option>Home Services</option>
+              <option>Professional Services</option>
+              <option>Other</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="full">
+          <span>What do you need?</span>
+          <textarea name="message" placeholder="Tell us about your project…" rows="5" required></textarea>
+        </label>
+
+        <!-- Honeypot (spam protection) -->
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
+        <!-- Custom email subject -->
+        <input type="hidden" name="_subject" value="New lead from BuildMyWeb" />
+
+        <!-- Optional redirect -->
+        <!-- <input type="hidden" name="_redirect" value="https://your-username.github.io/thankyou.html" /> -->
+
+        <button type="submit" class="btn btn-primary">Get My Quote</button>
+        <p class="form-note">Prefer to talk? <a href="booking.html">Book a 10-min call</a>.</p>
+      </form>
+    </section>
+  </main>
+
+  <!-- =============================
+       FOOTER
+       ============================= -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; <span id="year"></span> BuildMyWeb. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="mailto:mrad.hussein.200@gmail.com">mrad.hussein.200@gmail.com</a></li>
+        <li><a href="./privacy.html">Privacy</a></li>
+        <li><a href="./terms.html">Terms</a></li>
+        <li><a href="./cookies.html">Cookies</a></li>
+      </ul>
     </div>
-    <div class="portfolio-card">
-      <img src="https://via.placeholder.com/300x180" alt="Project 4">
-      <div class="portfolio-card-content">
-        <h3>Portfolio Website</h3>
-        <p>Custom portfolio for creative professionals showcasing projects elegantly.</p>
-      </div>
-    </div>
-  </div>
-</section>
+  </footer>
 
-<!-- ===== Why Trust Us Section ===== -->
-<section id="trust" class="trust">
-  <h2>Why Trust BuildMyWeb?</h2>
-  <p>We believe every business deserves a professional online presence. With experience in building responsive, modern, and affordable websites, we help small businesses and entrepreneurs grow. Your success is our mission — we deliver projects on time, on budget, and built to impress.</p>
-</section>
+  <!-- LocalBusiness schema for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "BuildMyWeb",
+    "url": "https://your-username.github.io/",
+    "image": "https://your-username.github.io/og-image.jpg",
+    "priceRange": "$$",
+    "areaServed": "Your City/Region",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "email": "mrad.hussein.200@gmail.com"
+    }
+  }
+  </script>
 
-<!-- ===== Reviews Section ===== -->
-<section id="reviews" class="reviews">
-  <h2>What Our Clients Say</h2>
-  <div class="review-card">
-    <p>⭐⭐⭐⭐⭐</p>
-    <p>"BuildMyWeb created the perfect site for my business. Affordable and professional!"</p>
-    <span>- Sarah M.</span>
-  </div>
-  <div class="review-card">
-    <p>⭐⭐⭐⭐⭐</p>
-    <p>"The team was quick, reliable, and delivered beyond expectations. Highly recommend."</p>
-    <span>- Jason L.</span>
-  </div>
-  <div class="review-card">
-    <p>⭐⭐⭐⭐⭐</p>
-    <p>"They built me a custom portfolio that helped me land new clients instantly."</p>
-    <span>- Emily R.</span>
-  </div>
-</section>
-
-<!-- ===== FAQ Section ===== -->
-<section id="faq" class="faq">
-  <h2>Frequently Asked Questions</h2>
-  <div class="faq-item">
-    <h3>How long does it take to build a website?</h3>
-    <p>Basic websites can be completed in 1–2 weeks, while larger projects may take longer depending on requirements.</p>
-  </div>
-  <div class="faq-item">
-    <h3>Do you offer ongoing support?</h3>
-    <p>Yes! We provide ongoing support, updates, and maintenance options.</p>
-  </div>
-  <div class="faq-item">
-    <h3>Can I request custom features?</h3>
-    <p>Absolutely. We tailor every website to your business needs.</p>
-  </div>
-</section>
-
-<!-- ===== Contact Section ===== -->
-<section id="contact" class="contact">
-  <h2>Contact Us</h2>
-  <form action="thankyou.html" method="post">
-    <input type="text" name="name" placeholder="Your Name" required>
-    <input type="email" name="email" placeholder="Your Email" required>
-    <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-    <button type="submit" class="btn">Send Message</button>
-  </form>
-</section>
-
-<!-- ===== Footer ===== -->
-<footer>
-  <p>&copy; 2025 BuildMyWeb. All rights reserved.</p>
-</footer>
-
+  <script>
+    // Auto-updates footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
