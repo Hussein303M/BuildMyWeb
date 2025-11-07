@@ -306,6 +306,29 @@
     // Auto-updates footer year
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+
+  <script>
+  // Stop the browser from restoring scroll position on reload/back
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  // Always jump to top on load
+  window.addEventListener('load', function () {
+    // If the URL has a hash (e.g. #contact), remove it so the browser
+    // doesn’t auto-jump down, then scroll to top.
+    if (window.location.hash) {
+      history.replaceState(null, document.title, window.location.pathname + window.location.search);
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  });
+
+  // Also reset scroll just before the page unloads (covers some edge cases)
+  window.addEventListener('beforeunload', function () {
+    window.scrollTo(0, 0);
+  });
+</script>
+
 </body>
 </html>
 
